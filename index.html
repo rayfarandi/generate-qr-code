@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  
+  <title>QR code Generator | Ray Farandi</title>
+
+
+  <style>
+    
+  </style>
+</head>
+<body>
+
+  <div class="flex flex-col justify-center items-center w-full h-screen bg-blue-50 ">
+    <div class="flex flex-col items-center justify-center max-w-48 lg:max-w-64 bg-white rounded-xl py-5 px-5 shadow-xl">
+      <div id="qrcode" class="w-full h-full ">
+        <img class="w-full h-full" src="images/image-qr-code.png" alt="Default QR Code Image">
+      </div>
+      <div class="text-center mt-3 ">
+        <div class="mb-3">
+          <p class="text-center text-l font-bold">Enter URL/Text:</p>
+          <form onsubmit="getQr(); return false;" class="w-full items-center">
+            <div class="mt-1">
+              <input
+                id="text"
+                type="text"
+                class="qr-input w-full rounded-lg p-1 shadow-sm bg-gray-200 text-black text-center
+                focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500"
+              />
+            </div>
+            <button type="submit" class="mt-3 bg-blue-500 hover:bg-blue-700 hover:shadow-lg text-gray-50 font-bold py-2 px-2 rounded-2xl text-sm">Generate QR</button>
+            <button  onclick="removeText()" class="mt-3 bg-red-500 hover:bg-red-700 hover:shadow-lg text-gray-50 font-bold py-2 px-2 rounded-2xl text-sm">Remove URL</button>
+          </form>
+        </div>
+        <p class="text-gray-500 text-center text-sm"> Scan QR code to <span class="font-bold text-sky-500 font-semibold">Download</span> or visit your <span class="font-bold text-sky-500 font-semibold">URL link</span></p>
+      </div>
+    </div>
+    <div class="flex justify-center items-center mt-6">
+      <button id="downloadBtn" class="bg-blue-500 hover:bg-blue-700 hover:shadow-lg text-white font-bold py-3 px-3 rounded-l">Download QR code</button>
+    </div>
+    <div class="flex inset-x-0 bottom-0 justify-center items-center bg-blue-50">
+      <p>Coded by <a class="hover:text-blue-700" href="https://rayfarandi.netlify.app/" target="_blank">Ray Farandi</a>.</p>
+    </div>
+  </div>
+  
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    function getQr() {
+      const qrText = document.getElementById('text').value;
+      const qrCodeContainer = document.getElementById('qrcode');
+      qrCodeContainer.innerHTML = ''; // Clear previous QR code or default image
+
+      if (qrText.trim() === "") {
+        qrCodeContainer.innerHTML = '<img class="w-full h-full" src="images/image-qr-code.png" alt="Default QR Code Image">';
+      } else {
+        const qrCode = new QRCode(qrCodeContainer, {
+          text: qrText,
+        });
+
+        // Download button
+        const downloadBtn = document.getElementById('downloadBtn');
+        downloadBtn.onclick = function() {
+          const qrCanvas = qrCodeContainer.querySelector('canvas');
+          const qrDataUrl = qrCanvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = qrDataUrl;
+          link.download = `${qrText}.qrcode.png`;
+          link.click();
+        };
+      }
+    }
+
+    function removeText() {
+      document.getElementById('text').value = ''; // Clear input text
+      document.getElementById('qrcode').innerHTML = '<img class="w-full h-full" src="images/image-qr-code.png" alt="Default QR Code Image">'; // Clear n default QR code
+    }
+  </script>
+</body>
+</html>

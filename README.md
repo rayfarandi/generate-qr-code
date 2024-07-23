@@ -1,1 +1,5 @@
-# generate-qr-code
+## Welcome! 👋
+QR Code Generator URL
+
+
+**Have fun building!** 🚀
